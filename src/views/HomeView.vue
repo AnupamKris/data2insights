@@ -7,9 +7,17 @@
         <div class="welcome" v-if="messages.length == 0 && fileUploaded">
           <h1>Welcome!</h1>
           <h3>Here are some commands you can try</h3>
-          <p>What is this data about?</p>
-          <p>What is the average of the employee salary?</p>
-          <p>What is the maximum mark obtained?</p>
+          <p @click="changeInput('What is this data about?')">
+            What is this data about?
+          </p>
+          <p
+            @click="changeInput('What is the average of the employee salary?')"
+          >
+            What is the average of the employee salary?
+          </p>
+          <p @click="changeInput('What is the maximum mark obtained?')">
+            What is the maximum mark obtained?
+          </p>
         </div>
         <div v-if="fileUploaded" class="messages">
           <div
@@ -86,10 +94,16 @@ const fileUploaded = ref(false);
 const fileInput = ref(null);
 const file = ref(null);
 const notifications = ref([]);
+const url = "https://data2insights.onrender.com/";
 
 const uploadFile = () => {
   fileInput.value.click();
   console.log(fileInput.value);
+};
+
+const changeInput = (text) => {
+  input.value = text;
+  sendMessage();
 };
 
 const checkFile = async (e) => {
@@ -99,7 +113,7 @@ const checkFile = async (e) => {
   const fileData = new FormData();
   fileData.append("file", file.value);
 
-  let res = await fetch("http://localhost:5000/uploadFile", {
+  let res = await fetch(url + "uploadFile", {
     method: "POST",
     body: fileData,
   });
@@ -137,7 +151,7 @@ const sendMessage = async () => {
     message: message.text,
   };
 
-  let res = await fetch("http://localhost:5000/getInference", {
+  let res = await fetch(url + "getInference", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
